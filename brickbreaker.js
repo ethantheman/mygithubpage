@@ -1,3 +1,10 @@
+/*  TO DO:
+	1. on game over, reset all bricks! DONE
+	2. on win, reset game. DONE
+	3. give the ball spin depending on motion of the paddle like slicing a tennis ball
+	4. make bricks harder to break (require more hits, change color on hits) DONE
+*/
+
 /* 
 coordinate notes:
 
@@ -10,13 +17,6 @@ and the paddle is 75 pixels wide
 canvas.height points to the bottom of the canvas
 0 points to the top of the canvas
 
-*/
-
-/*  // TO DO:
-	1. on game over, reset all bricks! DONE
-	2. on win, reset game. DONE
-	3. give the ball spin depending on motion of the paddle like slicing a tennis ball
-	4. add extra rows of bricks, make certain bricks harder to break (require more hits, change color on hits)
 */
 
 var canvas = document.getElementById("myCanvas");
@@ -50,7 +50,7 @@ var lives = 3;
 ///// BRICKS:
 var brickhash = {};
 for(var h = 0; h < 10; h++){
-	brickhash[h] = 1;
+	brickhash[h] = 3; // each brick must be hit thrice before it's deleted.
 }
 
 numBricks = Object.keys(brickhash).length;
@@ -60,7 +60,16 @@ function drawBricks(){
 	for(var i = 0; i < numBricks; i++){
 		if(brickhash[i] !== 0){
 				ctx.beginPath();
-				ctx.strokeStyle = "#B69011";
+				// bricks different colors depending on how many times they've been hit.
+				if(brickhash[i] === 3){
+					ctx.strokeStyle = "black";
+				}
+				else if(brickhash[i] === 2){
+					ctx.strokeStyle = "red";
+				}
+				else if(brickhash[i] === 1){
+					ctx.strokeStyle = "green";
+				}
 				ctx.rect(i * canvas.width/numBricks, 0, canvas.width / numBricks, paddleHeight);
 				ctx.stroke();
 				ctx.closePath();
@@ -112,8 +121,8 @@ function brickAt(x, dx){
 	// bricks are arranged evenly as a proportion of canvas.width. each is canvas.width / numBricks px wide
 	//  
 	brick = Math.floor((x + dx) / (canvas.width / numBricks)); // gives the index of the brick at x.
-	if(brickhash[brick] === 1){
-		brickhash[brick] = 0;
+	if(brickhash[brick] > 0){
+		brickhash[brick] -= 1;
 		return true;
 	}
 	return false;
@@ -160,7 +169,7 @@ function draw(){
 	if(!win){
 		zeroCount = 0;
 		for(var i = 0; i < numBricks; i++){
-			if(brickhash[i] != 1){
+			if(brickhash[i] === 0){
 				zeroCount += 1;
 			}
 		}
