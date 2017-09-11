@@ -1,10 +1,3 @@
-/*  TO DO:
-	1. on game over, reset all bricks! DONE
-	2. on win, reset game. DONE
-	3. give the ball spin depending on motion of the paddle like slicing a tennis ball
-	4. make bricks harder to break (require more hits, change color on hits) DONE
-*/
-
 /* 
 coordinate notes:
 
@@ -17,6 +10,13 @@ and the paddle is 75 pixels wide
 canvas.height points to the bottom of the canvas
 0 points to the top of the canvas
 
+*/
+
+/*  // TO DO:
+	1. on game over, reset all bricks! DONE
+	2. on win, reset game. DONE
+	3. give the ball spin depending on motion of the paddle like slicing a tennis ball
+	4. make bricks harder to break (require more hits, change color on hits)
 */
 
 var canvas = document.getElementById("myCanvas");
@@ -186,7 +186,7 @@ function draw(){
 				// reset lives, bricks ball and paddle to starting position.
 				lives = 3;
 				for(var i = 0; i < numBricks; i++){
-					brickhash[i] = 1;
+					brickhash[i] = 3;
 				}
 				x = canvas.width/2;
 				y = canvas.height-30;
@@ -247,7 +247,7 @@ function draw(){
 				// reset lives, bricks ball and paddle to starting position.
 				lives = 3;
 				for(var i = 0; i < numBricks; i++){
-					brickhash[i] = 1;
+					brickhash[i] = 3;
 				}
 				x = canvas.width/2;
 				y = canvas.height-30;
