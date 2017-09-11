@@ -13,12 +13,10 @@ canvas.height points to the bottom of the canvas
 */
 
 /*  // TO DO:
-	1a. on game over, reset all bricks!
-	1. define action when user wins game:
-		a. add button to reset game (or move on to next level?)
-		b. store high score (time?)
-	2. give the ball spin depending on motion of the paddle like slicing a tennis ball
-	3. add extra rows of bricks, make certain bricks harder to break (require more hits, change color on hits)
+	1. on game over, reset all bricks! DONE
+	2. on win, reset game. DONE
+	3. give the ball spin depending on motion of the paddle like slicing a tennis ball
+	4. add extra rows of bricks, make certain bricks harder to break (require more hits, change color on hits)
 */
 
 var canvas = document.getElementById("myCanvas");
@@ -58,7 +56,7 @@ for(var h = 0; h < 10; h++){
 numBricks = Object.keys(brickhash).length;
 
 function drawBricks(){
-	zero_count = 0;
+
 	for(var i = 0; i < numBricks; i++){
 		if(brickhash[i] !== 0){
 				ctx.beginPath();
@@ -66,12 +64,7 @@ function drawBricks(){
 				ctx.rect(i * canvas.width/numBricks, 0, canvas.width / numBricks, paddleHeight);
 				ctx.stroke();
 				ctx.closePath();
-		}else{
-			zero_count += 1;
 		}
-	}
-	if(zero_count === 10){
-		win = true;
 	}
 }
 
@@ -89,94 +82,6 @@ function drawPaddle(){
 	ctx.fillStyle = "#B69011";
 	ctx.fill();
 	ctx.closePath();
-}
-
-// MAIN FUNCTION:
-function draw(){
-
-	// display score:
-	scoreboard.innerHTML = "lives remaining: " + lives;
-
-	ctx.clearRect(0, 0, canvas.width, canvas.height); // CLEAR PREVIOUS DRAWING
-
-	// move paddle:
-	if(right_key){
-		if(paddleX < canvas.width - paddleWidth){
-			paddleX += 5;
-		}
-	}
-	else if(left_key){
-		if(paddleX > 0){
-			paddleX -= 5;			
-		}
-	}
-
-	// detection for bouncing off walls, bricks and paddle:
-	if(hitSide(x, dx)){
-		dx = -dx;
-	}
-
-	if(hitTop(y, dy)){
-		dy = -dy;
-	}
-
-	if(hitBrick(y, dy)){
-		dy = -dy;
-	}
-
-	if(hitPaddle(x, dx, y, dy)){
-		dy = -dy
-	}
-
-	if(hitBottom(y, dy)){
-		dy = 0;
-		dx = 0;
-
-		if(lives < 1){
-			// if no lives left, button resets game.
-			var button = document.createElement("button");
-			button.setAttribute("id", "button");
-			button.innerHTML = "Game over. Play again?";
-			document.getElementById("body").appendChild(button);
-			button.addEventListener ("click", function() {
-				// reset lives, ball and paddle to starting position.
-				lives = 3;
-				x = canvas.width/2;
-				y = canvas.height-30;
-			 	dx = 2;
-			 	dy = -2;
-			 	paddleX = (canvas.width-paddleWidth)/2;
-			 	document.getElementById('button').parentNode.removeChild(document.getElementById('button'));
-			});
-		}
-
-		else{
-			// if more lives left, add button to go again.
-			lives -= 1;
-			var button = document.createElement("button");
-			button.setAttribute("id", "button");
-			button.innerHTML = "Go again!";
-			document.getElementById("body").appendChild(button);
-			button.addEventListener ("click", function() {
-				// deduct 1 life, reset ball and paddle to starting position.
-				x = canvas.width/2;
-				y = canvas.height-30;
-			 	dx = 2;
-			 	dy = -2;
-			 	paddleX = (canvas.width-paddleWidth)/2;
-			 	document.getElementById('button').parentNode.removeChild(document.getElementById('button'));
-			});
-
-		}
-	}
-
-	x += dx;
-	y += dy;
-
-	// DRAW NEW ELEMENTS
-	drawBricks();
-	drawPaddle();
-	drawBall();
 }
 
 function hitSide(x, dx){
@@ -246,6 +151,132 @@ function keyUpHandler(e){
 	else if(e.keyCode == 37){ // left arrow
 		left_key = false;
 	}
+}
+
+// MAIN FUNCTION:
+function draw(){
+
+	// check if any bricks are remaining:
+	if(!win){
+		zeroCount = 0;
+		for(var i = 0; i < numBricks; i++){
+			if(brickhash[i] != 1){
+				zeroCount += 1;
+			}
+		}
+		if(zeroCount === 10){
+			win = true;
+			dx = 0;
+			dy = 0;
+			console.log('you win!');
+			var button = document.createElement("button");
+			button.setAttribute("id", "button");
+			button.innerHTML = "You win! Play again?";
+			document.getElementById("body").appendChild(button);
+			button.addEventListener ("click", function() {
+				// reset lives, bricks ball and paddle to starting position.
+				lives = 3;
+				for(var i = 0; i < numBricks; i++){
+					brickhash[i] = 1;
+				}
+				x = canvas.width/2;
+				y = canvas.height-30;
+			 	dx = 2;
+			 	dy = -2;
+			 	paddleX = (canvas.width-paddleWidth)/2;
+			 	document.getElementById('button').parentNode.removeChild(document.getElementById('button'));
+			 	win = false;
+			});
+		}
+	}
+
+	// display score:
+	scoreboard.innerHTML = "lives remaining: " + lives;
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height); // CLEAR PREVIOUS DRAWING
+
+	// move paddle:
+	if(right_key){
+		if(paddleX < canvas.width - paddleWidth){
+			paddleX += 5;
+		}
+	}
+	else if(left_key){
+		if(paddleX > 0){
+			paddleX -= 5;			
+		}
+	}
+
+	// detection for bouncing off walls, bricks and paddle:
+	if(hitSide(x, dx)){
+		dx = -dx;
+	}
+
+	if(hitTop(y, dy)){
+		dy = -dy;
+	}
+
+	if(hitBrick(y, dy)){
+		dy = -dy;
+	}
+
+	if(hitPaddle(x, dx, y, dy)){
+		dy = -dy
+	}
+
+	if(hitBottom(y, dy)){
+		dy = 0;
+		dx = 0;
+
+		if(lives < 1){
+			// if no lives left, button resets game.
+			var button = document.createElement("button");
+			button.setAttribute("id", "button");
+			button.innerHTML = "Game over. Play again?";
+			document.getElementById("body").appendChild(button);
+			button.addEventListener ("click", function() {
+				// reset lives, bricks ball and paddle to starting position.
+				lives = 3;
+				for(var i = 0; i < numBricks; i++){
+					brickhash[i] = 1;
+				}
+				x = canvas.width/2;
+				y = canvas.height-30;
+			 	dx = 2;
+			 	dy = -2;
+			 	paddleX = (canvas.width-paddleWidth)/2;
+			 	document.getElementById('button').parentNode.removeChild(document.getElementById('button'));
+			});
+		}
+
+		else{
+			// if more lives left, add button to go again.
+			lives -= 1;
+			var button = document.createElement("button");
+			button.setAttribute("id", "button");
+			button.innerHTML = "Go again!";
+			document.getElementById("body").appendChild(button);
+			button.addEventListener ("click", function() {
+				// deduct 1 life, reset ball and paddle to starting position.
+				x = canvas.width/2;
+				y = canvas.height-30;
+			 	dx = 2;
+			 	dy = -2;
+			 	paddleX = (canvas.width-paddleWidth)/2;
+			 	document.getElementById('button').parentNode.removeChild(document.getElementById('button'));
+			});
+
+		}
+	}
+
+	x += dx;
+	y += dy;
+
+	// DRAW NEW ELEMENTS
+	drawBricks();
+	drawPaddle();
+	drawBall();
+
 }
 
 
