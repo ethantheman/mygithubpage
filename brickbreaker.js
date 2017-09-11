@@ -200,7 +200,7 @@ function draw(){
 	}
 
 	// display score:
-	scoreboard.innerHTML = "lives remaining: " + lives;
+	scoreboard.innerHTML = "LIVES REMAINING: " + lives;
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height); // CLEAR PREVIOUS DRAWING
 
@@ -230,6 +230,7 @@ function draw(){
 	}
 
 	if(hitPaddle(x, dx, y, dy)){
+		// i want to give the ball spin depending on motion of the paddle.
 		dy = -dy
 	}
 
