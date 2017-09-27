@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Calculator</title>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <style>
+        #main{
+            width: 75px;
+            height: 100px;
+            background: #A7A394;
+            position: relative;
+        }
+
+        #tile {
+            cursor: pointer;
+            border-radius:1px;
+            border-color: black;
+            border-style: solid;
+            letter-spacing: 2px;
+            text-align: center;
+            background-color: #333fff;
+
+        }
+        #tile:hover{
+            background-color:#555fff;
+
+        }
+
+        #screen {
+            display:block;
+            font-family: sans-serif;
+            width: 95%;
+            height: 10%;
+            margin:5px auto;
+            text-align: right;
+            border:0;
+            background:#3b3535;
+            color:#fff;
+            padding-top:10px;
+            font-size:10px;
+            outline: none;
+            overflow: hidden;
+            letter-spacing: 1px;
+            position: relative;
+            top:2px;
+        }
+
+        .row{
+            display:block;
+            height: 10%;
+            width: 95%;
+            font-family: sans-serif;
+            text-align: center;
+            margin-bottom: 3px;
+            font-size:10px;
+            outline: none;
+            position: relative;
+        }
+
+        #AC {
+            cursor: pointer;
+            border-style: solid;
+            border-color: black;
+            border-radius: 1px;
+            background-color: #aaaaaa;
+        }
+
+        #AC:hover{
+            background-color: #bcbcbc;
+        }
+
+        #equals {
+            cursor: pointer;
+            border-style: solid;
+            border-color: black;
+            border-radius: 1px;
+            background-color: #578111;
+            margin: 10px auto;
+        }
+
+        #equals:hover{
+            background-color: #578199;
+        }
+
+        table{
+            margin: 2px auto;
+            
+        }
+
+    </style>
+
+</head>
+
+<body id="body">
+    <script src="calculator.js">
+    // javascript linked to separate file
+    </script>
+    <div id="main">
+        <div id="screen"></div>
+        <div class="row"><table id="row1"></table></div> 
+        <div class="row"><table id="row2"></table></div>
+        <div class="row"><table id="row3"></table></div>
+        <div class="row"><table id="row4"></table></div>
+        <div class="row"><table id="row5"></table></div>
+    </div>
+</body>
+</html>
